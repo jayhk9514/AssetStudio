@@ -7,7 +7,7 @@ AssetStudio is a tool for exploring, extracting and exporting assets and assetbu
 
 ## Features
 * Support version:
-  * 2.5 - 2020.1
+  * 2.5 - 2021.1
 * Support asset types:
   * **Texture2D** : convert to png, tga, jpeg, bmp
   * **Sprite** : crop Texture2D to png, tga, jpeg, bmp
@@ -59,7 +59,7 @@ When you select an asset of the MonoBehaviour type for the first time, AssetStud
 
 #### For Il2Cpp
 
-First, use my other program [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) to generate dummy dll, then when using AssetStudio to select the assembly directory, select the dummy dll folder.
+First, use my another program [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) to generate dummy dll, then when using AssetStudio to select the assembly directory, select the dummy dll folder.
 
 ## Build
 
