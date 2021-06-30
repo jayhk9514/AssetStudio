@@ -19,6 +19,7 @@ using System.Timers;
 using System.Windows.Forms;
 using static AssetStudioGUI.Studio;
 using Font = AssetStudio.Font;
+using ImageFormat = AssetStudio.ImageFormat;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Vector3 = OpenTK.Vector3;
 using Vector4 = OpenTK.Vector4;
@@ -115,7 +116,7 @@ namespace AssetStudioGUI
             if (paths.Length > 0)
             {
                 ResetForm();
-
+                assetsManager.SpecifyUnityVersion = specifyUnityVersion.Text;
                 if (paths.Length == 1 && Directory.Exists(paths[0]))
                 {
                     await Task.Run(() => assetsManager.LoadFolder(paths[0]));
@@ -124,7 +125,6 @@ namespace AssetStudioGUI
                 {
                     await Task.Run(() => assetsManager.LoadFiles(paths));
                 }
-
                 BuildAssetStructures();
             }
         }
@@ -134,6 +134,7 @@ namespace AssetStudioGUI
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 ResetForm();
+                assetsManager.SpecifyUnityVersion = specifyUnityVersion.Text;
                 await Task.Run(() => assetsManager.LoadFiles(openFileDialog1.FileNames));
                 BuildAssetStructures();
             }
@@ -145,6 +146,7 @@ namespace AssetStudioGUI
             if (openFolderDialog.ShowDialog(this) == DialogResult.OK)
             {
                 ResetForm();
+                assetsManager.SpecifyUnityVersion = specifyUnityVersion.Text;
                 await Task.Run(() => assetsManager.LoadFolder(openFolderDialog.Folder));
                 BuildAssetStructures();
             }
@@ -741,9 +743,10 @@ namespace AssetStudioGUI
 
         private void PreviewTexture2D(AssetItem assetItem, Texture2D m_Texture2D)
         {
-            var bitmap = m_Texture2D.ConvertToBitmap(true);
-            if (bitmap != null)
+            var stream = m_Texture2D.ConvertToStream(ImageFormat.Png, true);
+            if (stream != null)
             {
+                var bitmap = new Bitmap(stream);
                 assetItem.InfoText = $"Width: {m_Texture2D.m_Width}\nHeight: {m_Texture2D.m_Height}\nFormat: {m_Texture2D.m_TextureFormat}";
                 switch (m_Texture2D.m_TextureSettings.m_FilterMode)
                 {
@@ -1151,11 +1154,11 @@ namespace AssetStudioGUI
 
         private void PreviewSprite(AssetItem assetItem, Sprite m_Sprite)
         {
-            var bitmap = m_Sprite.GetImage();
-            if (bitmap != null)
+            var stream = m_Sprite.GetImage(ImageFormat.Png);
+            if (stream != null)
             {
+                var bitmap = new Bitmap(stream);
                 assetItem.InfoText = $"Width: {bitmap.Width}\nHeight: {bitmap.Height}\n";
-
                 PreviewTexture(bitmap);
             }
             else
